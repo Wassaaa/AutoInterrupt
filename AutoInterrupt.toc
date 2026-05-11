@@ -2,7 +2,7 @@
 ## Title: AutoInterrupt
 ## Notes: Keeps focus, interrupt, stop, and ready-check role markers simple.
 ## Author: Wabot
-## Version: 0.1
+## Version: @project-version@
 ## SavedVariablesPerCharacter: AutoInterruptDB
 
 AutoInterrupt.lua

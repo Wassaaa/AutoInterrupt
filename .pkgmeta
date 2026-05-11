@@ -1,0 +1,5 @@
+package-as: AutoInterrupt
+
+ignore:
+  - .vscode
+  - AutoInterrupt.zip
