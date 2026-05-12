@@ -1,5 +1,11 @@
 local grailSummons = ...
 
+---@class AutoInterruptSavedVariables
+---@field focusMarker? number
+---@field dbVersion? number
+---@type AutoInterruptSavedVariables
+AutoInterruptDB = AutoInterruptDB or {}
+
 local HOLY_GRAIL_FOCUS_SCROLL = "AutoFocus"
 local BLACK_KNIGHT_KICK_SCROLL = "AutoKick"
 local MINISTRY_STOP_SCROLL = "AutoStop"
@@ -47,26 +53,14 @@ local MINISTRY_OF_STOPPING_TABLET = {
 
 local function ConsultTheOracle(spellSigil)
     if not spellSigil then return nil end
-    if C_Spell and C_Spell.GetSpellInfo then
-        local oracleScroll = C_Spell.GetSpellInfo(spellSigil)
-        return oracleScroll and oracleScroll.name
-    end
-    if GetSpellInfo then
-        return GetSpellInfo(spellSigil)
-    end
-    return nil
+    local oracleScroll = C_Spell.GetSpellInfo(spellSigil)
+    return oracleScroll and oracleScroll.name
 end
 
 local function KnowsTheSecretHandshake(spellSigil)
     if not spellSigil then return false end
-    if IsSpellKnown then
-        if IsSpellKnown(spellSigil) then return true end
-        if IsSpellKnown(spellSigil, true) then return true end
-    end
-    if C_Spell and C_Spell.IsSpellKnown then
-        return C_Spell.IsSpellKnown(spellSigil)
-    end
-    return false
+    return C_SpellBook.IsSpellKnown(spellSigil, Enum.SpellBookSpellBank.Player)
+        or C_SpellBook.IsSpellKnown(spellSigil, Enum.SpellBookSpellBank.Pet)
 end
 
 local function AskBridgeKeeperForInterrupt(chosenSpec, braveClass)
@@ -178,7 +172,6 @@ ministryInbox:RegisterEvent("READY_CHECK")
 
 ministryInbox:SetScript("OnEvent", function(_, royalDecree, decreePayload)
     if royalDecree == "ADDON_LOADED" and decreePayload == grailSummons then
-        AutoInterruptDB = AutoInterruptDB or {}
         if not AutoInterruptDB.dbVersion and (not AutoInterruptDB.focusMarker or AutoInterruptDB.focusMarker == 3) then
             AutoInterruptDB.focusMarker = DEFAULT_SHRUBBERY_MARKER
         end
@@ -201,8 +194,8 @@ ministryInbox:SetScript("OnEvent", function(_, royalDecree, decreePayload)
     end
 end)
 
-SLASH_AUTOINTERUPT1 = "/ai"
-SLASH_AUTOINTERUPT2 = "/autointerrupt"
+_G["SLASH_AUTOINTERUPT1"] = "/ai"
+_G["SLASH_AUTOINTERUPT2"] = "/autointerrupt"
 SlashCmdList["AUTOINTERUPT"] = function(msg)
     msg = strtrim(string.lower(msg or ""))
 
