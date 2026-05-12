@@ -1,4 +1,5 @@
 package-as: AutoInterrupt
+manual-changelog: CHANGELOG.md
 
 ignore:
   - .vscode

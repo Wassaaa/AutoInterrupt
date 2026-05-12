@@ -7,6 +7,7 @@ AutoInterrupt is a minimal World of Warcraft addon. Keep it small, quiet, and so
 - `AutoInterrupt.lua` is the addon code.
 - `AutoInterrupt.toc` is the WoW addon manifest.
 - `README.md` is the public project description.
+- `CHANGELOG.md` is the CurseForge manual changelog.
 - `.pkgmeta` is the CurseForge packager config.
 - `.vscode/` and generated zip files are ignored.
 
@@ -19,6 +20,7 @@ Treat documentation as part of the same change, not a follow-up.
 Whenever changing behavior, commands, macros, packaging, release flow, supported interface versions, saved variables, or project structure, update every affected doc/config file in the same editing pass:
 
 - `README.md` for user-facing behavior, commands, macro names, and CurseForge-facing description.
+- `CHANGELOG.md` for release-visible user-facing changes.
 - `AGENTS.md` for agent workflow, release process, validation, packaging rules, or repo conventions.
 - `.pkgmeta` when package contents, ignored files, included files, externals, changelog behavior, or package naming changes.
 - `AutoInterrupt.toc` when metadata, interface versions, saved variables, or loaded files change.
@@ -57,6 +59,7 @@ The repo uses `.pkgmeta`:
 
 ```yaml
 package-as: AutoInterrupt
+manual-changelog: CHANGELOG.md
 ```
 
 The TOC version uses:
@@ -66,6 +69,8 @@ The TOC version uses:
 ```
 
 CurseForge replaces `@project-version@` during packaging.
+
+Use `CHANGELOG.md` for CurseForge changelogs. Do not rely on generated git commit changelogs, because those can expose commit author metadata such as email addresses.
 
 ## Release Tags
 
@@ -101,4 +106,4 @@ git status --short --branch
 git log --oneline -5
 ```
 
-Only tag a clean working tree unless the user explicitly tells you otherwise.
+Only tag a clean working tree unless the user explicitly tells you otherwise. Make sure `CHANGELOG.md` already contains the release notes for the version being tagged.
