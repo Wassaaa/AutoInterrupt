@@ -12,6 +12,20 @@ AutoInterrupt is a minimal World of Warcraft addon. Keep it small, quiet, and so
 
 Do not add an options UI, chat spam, dungeon targeting logic, vendored libraries, or build artifacts unless explicitly requested.
 
+## Documentation First
+
+Treat documentation as part of the same change, not a follow-up.
+
+Whenever changing behavior, commands, macros, packaging, release flow, supported interface versions, saved variables, or project structure, update every affected doc/config file in the same editing pass:
+
+- `README.md` for user-facing behavior, commands, macro names, and CurseForge-facing description.
+- `AGENTS.md` for agent workflow, release process, validation, packaging rules, or repo conventions.
+- `.pkgmeta` when package contents, ignored files, included files, externals, changelog behavior, or package naming changes.
+- `AutoInterrupt.toc` when metadata, interface versions, saved variables, or loaded files change.
+- `.gitignore` when new local-only files, generated files, or editor/build artifacts appear.
+
+Before finishing any code/config change, explicitly check whether docs and packaging metadata need to move with it. If they do, edit them before committing. Do not leave doc, `.pkgmeta`, TOC, or agent-note updates for a later pass unless the user explicitly asks to postpone them.
+
 ## Validation
 
 After Lua or TOC changes:
