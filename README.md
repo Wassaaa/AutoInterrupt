@@ -15,3 +15,35 @@ It automatically creates and updates three general macros:
 `AutoStop` uses a class-appropriate stop/CC spell, prioritizing focus, then mouseover, then current target.
 
 On ready check, AutoInterrupt marks the tank with square and the healer with moon.
+
+## Generated Macros
+
+`AutoFocus`:
+
+```macro
+/tm [@focus,exists] 0
+/focus [@mouseover,nodead,exists] [@target,nodead,exists][]
+/tm [@focus,exists,nodead] 4
+```
+
+`AutoKick`:
+
+```macro
+#showtooltip <interrupt>
+/cast [@focus,exists,nodead,harm] <interrupt>
+/stopmacro [@focus,exists,nodead,harm]
+/focus target
+/cleartarget
+/targetenemy
+/cast <interrupt>
+/target focus
+/clearfocus
+/startattack
+```
+
+`AutoStop`:
+
+```macro
+#showtooltip
+/cast [@focus,exists,nodead] [@mouseover,exists,nodead] [] <stop>
+```
