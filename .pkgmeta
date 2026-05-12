@@ -2,4 +2,5 @@ package-as: AutoInterrupt
 
 ignore:
   - .vscode
+  - AGENTS.md
   - AutoInterrupt.zip
