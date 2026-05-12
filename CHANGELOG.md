@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Fixed ready-check role marking by restoring a secure click prompt, which is required by WoW's protected raid-marker API.
+- Updated README wording for the ready-check marker behavior.
+
 ## v1.0.1
 
 - Added clearer README quick start instructions.

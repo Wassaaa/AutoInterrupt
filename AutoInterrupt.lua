@@ -148,19 +148,59 @@ local function RefreshTheSacredScrolls()
     end
 end
 
-local function AppointTheProperHats()
+local hatMandate = CreateFrame("Frame", "AutoInterruptHatMandate", UIParent, "BackdropTemplate")
+hatMandate:SetSize(300, 96)
+hatMandate:SetPoint("TOP", UIParent, "TOP", 0, -200)
+hatMandate:SetFrameStrata("DIALOG")
+hatMandate.backdropInfo = {
+    bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+    edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+    tile = true,
+    tileSize = 32,
+    edgeSize = 32,
+    insets = { left = 11, right = 12, top = 12, bottom = 11 },
+}
+hatMandate:ApplyBackdrop()
+hatMandate:Hide()
+
+local hatMandateNotice = hatMandate:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+hatMandateNotice:SetPoint("TOP", 0, -24)
+hatMandateNotice:SetText("Mark tank and healer?")
+
+local hatMandateButton = CreateFrame("Button", nil, hatMandate, "SecureActionButtonTemplate, UIPanelButtonTemplate")
+hatMandateButton:SetSize(110, 25)
+hatMandateButton:SetPoint("BOTTOM", 0, 20)
+hatMandateButton:SetText(_G.YES or "Yes")
+hatMandateButton:RegisterForClicks("AnyUp", "AnyDown")
+hatMandateButton:SetAttribute("type", "macro")
+hatMandateButton:SetScript("PostClick", function()
+    if not InCombatLockdown() then
+        hatMandate:Hide()
+    end
+end)
+
+local function DraftTheHatMandate()
+    local decree = ""
     local roundTable = { "player", "party1", "party2", "party3", "party4" }
+    local needsRoyalAssent = false
 
     for _, braveSoul in ipairs(roundTable) do
         if UnitExists(braveSoul) then
             local appointedOffice = UnitGroupRolesAssigned(braveSoul)
             if appointedOffice == "TANK" and not GetRaidTargetIndex(braveSoul) then
-                SetRaidTarget(braveSoul, 6)
+                decree = decree .. "/tm [@" .. braveSoul .. "] 6\n"
+                needsRoyalAssent = true
             elseif appointedOffice == "HEALER" and not GetRaidTargetIndex(braveSoul) then
-                SetRaidTarget(braveSoul, 5)
+                decree = decree .. "/tm [@" .. braveSoul .. "] 5\n"
+                needsRoyalAssent = true
             end
         end
     end
+
+    if needsRoyalAssent then
+        return decree
+    end
+    return nil
 end
 
 local ministryInbox = CreateFrame("Frame")
@@ -189,7 +229,16 @@ ministryInbox:SetScript("OnEvent", function(_, royalDecree, decreePayload)
         end
     elseif royalDecree == "READY_CHECK" then
         if IsInGroup() and not IsInRaid() and not InCombatLockdown() then
-            AppointTheProperHats()
+            local decree = DraftTheHatMandate()
+            if decree then
+                hatMandateButton:SetAttribute("macrotext", decree)
+                hatMandate:Show()
+                C_Timer.After(15, function()
+                    if hatMandate:IsShown() and not InCombatLockdown() then
+                        hatMandate:Hide()
+                    end
+                end)
+            end
         end
     end
 end)

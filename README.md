@@ -21,7 +21,7 @@ It automatically creates and updates three general macros:
 
 `AutoStop` uses a class-appropriate stop/CC spell, prioritizing focus, then mouseover, then current target.
 
-On ready check, AutoInterrupt marks the tank with square and the healer with moon.
+On ready check, AutoInterrupt shows a small button to mark the tank with square and the healer with moon. WoW requires a real click for raid-marker changes, so the addon prepares the marks and your click applies them.
 
 ## Generated Macros
 
